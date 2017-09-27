@@ -58,7 +58,7 @@ cleaning=0
 step1=1 # tokenization with moses
 step1b=1 # get smaller length sentences if too long
 step2=1 # ITN with NMT (pytorch)
-#step3=0 # comparison and post-processing
+#step3=0 # comparison and post-processing TODO
 # Optional:
 step4=0 # detokenization (not recommended)
 
@@ -112,26 +112,23 @@ if (( $step2==1 )); then
 	    logo=$TEMPDIR/gridlogs/asr2mt-de-test.o
 	    loge=$TEMPDIR/gridlogs/asr2mt-de-test.e
 	    # ITN stands for inverse text normalization
-            qsub -l q_gpu -N $jobname -S /bin/bash -o $logo -e $loge -cwd asr2mt.job $nmtmodel $TEMPDIR/$bname.tok $TEMPDIR/$bname.itn
+            qsub -l q_gpu -N $jobname -S /bin/bash -o $logo -e $loge \
+		 -cwd asr2mt.job $nmtmodel $TEMPDIR/$bname.tok $TEMPDIR/$bname.itn
 	else
 	    # Simple case where GPU is on the same machine:
-	    python $NMTDIR/translate.py -gpu 0 -model $nmtmodel -src $TEMPDIR/$bname.tok -replace_unk -verbose -output $TEMPDIR/$bname.itn
+	    python $NMTDIR/translate.py -gpu 0 -model $nmtmodel \
+		   -src $TEMPDIR/$bname.tok -replace_unk -verbose -output $TEMPDIR/$bname.itn
 	fi
     )
 fi
 
 # Step 3: compare NMT output and input
+# Not implemented yet
 if (( $step3==1 )); then
     echo "Step 3: Comparing NMT-based ITN with input and post processing"
+    # TODO
     # Input:  $TEMPDIR/$bname.itn
     # Output: $TEMPDIR/$bname.txt
-    counter=0
-    while read sentence
-    do counter=`echo $counter | awk '{print $1+1}'`
-       orig_sentence=`head -n $counter $input | tail -1`
-       sentence_length=`wc $sentence`
-       orig_sentence_length=`wc $orig_sentence`
-    done < $bname.itn
 fi
 
 if (( $step4==1 )); then

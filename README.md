@@ -28,7 +28,7 @@ another text normalization tool if you prefer.
 run NMT models. This installation requires a bunch of other things,
 but mainly relies on [PyTorch](http://pytorch.org/).
 
-## Using pretrained models:
+## Using pretrained models
 
 You simply need to adjust the paths in the script `scripts/asr2mt.sh`
 ($BASEDIR, $MOSESDIR and $NMTDIR, as well as $nmtmodel if you do not
@@ -66,8 +66,7 @@ tail -n +1825248 Europarl.de-fr.de > Europarl.test.de-fr.de
 cd ../..
 ```
 
-### 1) Preprocess the data (Tokenization and "escaping" punctuation we
-    want to keep).
+### 1) Preprocess the data (Tokenization and "escaping" punctuation we want to keep).
 
 Note that in our tests, we deleted manually some noise in the training
 data before this step (e.g. remove the lines with only punctuations,
@@ -124,7 +123,7 @@ python $OPENNMTBASE/train.py -data data/Europarl_punc.atok.train.pt \
 
 ```
 
-### 5) To test the system, see the pretrained models section.
+### 5) To test the system, see the "Using pretrained models" section.
 
 
 ## Release Notes
@@ -135,11 +134,8 @@ text.
 Some other models have been trained using no punctuation (it means,
 not using the 2 steps with `sed` in step 1 and step 2).  This means
 that the model will try to recover punctuation during "translation".
-In practice, it would be better to do it with punctuation in both
+In practice, it should be better to do it with punctuation in both
 normalized and not normalized versions (if we assume that ASR is
-followed by a punctuation prediction module).  We were not able yet to
-train a system for this task. Various other architectures may perform
-better in this arguably "easier" task.
-
+followed by or has a punctuation prediction module).
 
 
